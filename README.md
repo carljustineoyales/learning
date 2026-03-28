@@ -23,7 +23,7 @@ Beginner-to-confident shell scripting curriculum. `Prompt.md` contains the full 
 | 1 | Intro to shell scripts, shebang, permissions | Done |
 | 2 | Variables, arithmetic, special variables | Done |
 | 3 | User input/output, pipes, heredocs, colours | Done |
-| 4 | Conditionals | Planned |
+| 4 | Conditionals | Done |
 | 5 | Loops | Planned |
 | 6 | Functions | Planned |
 | 7 | Error handling and safe scripting | Planned |
