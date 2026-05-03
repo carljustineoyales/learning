@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "module_1_intro", "module_1_intro", "{B606531D-9523-09CB-F74B-EF161CE8D965}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "discussion", "discussion", "{E0457E96-106B-0752-6D58-118F099021C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirstApp", "module_1_intro\discussion\MyFirstApp\MyFirstApp.csproj", "{65CD6A42-62BF-C739-0AEB-5D1E0EDA5A76}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65CD6A42-62BF-C739-0AEB-5D1E0EDA5A76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65CD6A42-62BF-C739-0AEB-5D1E0EDA5A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65CD6A42-62BF-C739-0AEB-5D1E0EDA5A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65CD6A42-62BF-C739-0AEB-5D1E0EDA5A76}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E0457E96-106B-0752-6D58-118F099021C5} = {B606531D-9523-09CB-F74B-EF161CE8D965}
+		{65CD6A42-62BF-C739-0AEB-5D1E0EDA5A76} = {E0457E96-106B-0752-6D58-118F099021C5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D78AB769-8B2D-4D3A-9B6F-D3C67FEB4FB2}
+	EndGlobalSection
+EndGlobal
