@@ -1,0 +1,202 @@
+# Module 1: Your First Terraform Configuration
+
+## Opening analogy
+
+Imagine you are a new sysadmin at a company and your job is to build a server room. You could walk in each day, plug in cables by hand, and write nothing down — and it would work, right up until someone asks "what exactly did you do last Tuesday?" and you can't answer. Terraform is the blueprint that replaces the guesswork. Instead of clicking through the AWS Console and hoping you remember every setting, you write down exactly what you want — in a file — and Terraform reads that file and builds it. If you want two identical environments, you hand the same file to two builders. If something breaks, you look at the file. The file is the truth. The Console is just a window into what the file already decided.
+
+---
+
+## Concept 1: What Terraform is and why it exists
+
+Terraform is an Infrastructure as Code (IaC) tool made by HashiCorp. You write configuration files in a language called HCL (HashiCorp Configuration Language) that describe the infrastructure you want — EC2 instances, S3 buckets, RDS databases, IAM roles — and Terraform figures out how to create, update, or destroy those resources to match your description.
+
+The key word is **declarative**: you say what you want, not how to get there. Terraform handles the how. This is different from writing a Bash script that calls the AWS CLI in a specific order — with Terraform, you describe the end state, and it works out the steps itself.
+
+> **Exam note:** The Terraform Associate exam tests the distinction between declarative and imperative IaC. Know the difference cold.
+
+### Activity 1
+
+Open your terminal and run:
+
+```bash
+terraform version
+```
+
+If Terraform is not installed, install it now. On Ubuntu 24 the cleanest method is the official HashiCorp APT repository:
+
+```bash
+sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+
+wget -O- https://apt.releases.hashicorp.com/gpg | \
+  gpg --dearmor | \
+  sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+  https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+  sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+sudo apt update && sudo apt-get install terraform
+```
+
+**Expected result:** A version string like `Terraform v1.9.x` prints without errors. If you see `command not found`, the installation did not complete — check each step above before continuing.
+
+---
+
+## Concept 2: Providers
+
+Terraform does not know how to talk to AWS on its own. It uses plugins called **providers**. The AWS provider translates your HCL into AWS API calls. Every cloud and service has its own provider — AWS, Azure, GCP, GitHub, Cloudflare, and hundreds more. You declare which provider you need at the top of your configuration, and Terraform downloads it automatically when you initialise a project.
+
+Think of providers as translators: Terraform speaks HCL, AWS speaks its own API, and the provider sits in the middle doing the translation.
+
+> **Exam note:** The exam tests provider version constraints. Pay close attention to how version numbers are pinned — `~> 5.0` means "5.x but not 6.0".
+
+### Activity 2
+
+Create a new directory and your first config file:
+
+```bash
+mkdir terraform-lab && cd terraform-lab
+touch main.tf
+```
+
+Add this to `main.tf`:
+
+```hcl
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "ap-southeast-1"
+}
+```
+
+> The region `ap-southeast-1` (Singapore) is correct for your stack. Your EC2, RDS, and S3 resources all live there. Do not copy `us-east-1` from random tutorials.
+
+Then run:
+
+```bash
+terraform init
+```
+
+**Expected result:** You will see "Initialising the backend...", "Initialising provider plugins...", and finally "Terraform has been successfully initialised!" A hidden `.terraform/` directory and a `.terraform.lock.hcl` file appear. A credentials error at this stage is expected — you will fix that next.
+
+---
+
+## Concept 3: Authentication — connecting Terraform to your AWS account
+
+Terraform needs AWS credentials to do anything. The two most common ways to provide them are environment variables (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) and a named AWS CLI profile.
+
+**Never hard-code credentials directly into your `.tf` files.** They will end up in version control and that is a serious security incident waiting to happen. The right local approach is a named AWS CLI profile. In production, you would use IAM roles instead of static keys entirely.
+
+> **Exam note:** The exam tests the order in which Terraform searches for credentials: environment variables → shared credentials file (`~/.aws/credentials`) → IAM instance profile. Know this order.
+
+### Activity 3
+
+Check what profiles you already have configured:
+
+```bash
+cat ~/.aws/credentials
+```
+
+If you have an existing profile, add it to your provider block:
+
+```hcl
+provider "aws" {
+  region  = "ap-southeast-1"
+  profile = "your-profile-name"
+}
+```
+
+If you do not have a profile yet, create one:
+
+```bash
+aws configure --profile terraform-lab
+```
+
+Supply the access key and secret key for an IAM user with `AdministratorAccess` (for learning only — you will scope this down later). Then use `profile = "terraform-lab"` in your provider block.
+
+Run `terraform init` again.
+
+**Expected result:** `terraform init` completes without credential errors. If you see "No valid credential sources found", the profile name in your `.tf` file does not match what is in `~/.aws/credentials` — check the spelling exactly.
+
+---
+
+## Common beginner traps
+
+### Hard-coded credentials
+
+Beginners paste keys directly into the provider block because it works immediately. Those keys will be committed to Git.
+
+```hcl
+# Wrong
+provider "aws" {
+  access_key = "AKIAIOSFODNN7EXAMPLE"
+  secret_key = "wJalrXUtnFEMI..."
+  region     = "ap-southeast-1"
+}
+
+# Correct
+provider "aws" {
+  profile = "terraform-lab"
+  region  = "ap-southeast-1"
+}
+```
+
+### Wrong region
+
+Students use `us-east-1` from tutorials but their real resources are in `ap-southeast-1`. Terraform creates resources in the wrong region and they wonder why they cannot find them.
+
+### Forgetting to re-run init after changing providers
+
+Any change to `required_providers` requires another `terraform init` before you can plan or apply.
+
+```
+# Wrong:  edit providers block → immediately run terraform plan
+# Correct: edit providers block → terraform init → terraform plan
+```
+
+---
+
+## Milestone
+
+Your `terraform-lab/` directory should contain:
+
+- `main.tf` with a provider block pointing at `ap-southeast-1` using a named profile (not hard-coded keys)
+- A `.terraform/` directory and `.terraform.lock.hcl` from a successful `terraform init`
+
+Run:
+
+```bash
+terraform validate
+```
+
+Then initialise a Git repository and add a `.gitignore`:
+
+```bash
+git init
+cat > .gitignore <<EOF
+.terraform/
+*.tfstate
+*.tfstate.backup
+EOF
+```
+
+Commit `main.tf`, `.gitignore`, and `.terraform.lock.hcl`.
+
+**Expected result:** `terraform validate` prints "Success! The configuration is valid." and your Git repo has its first commit.
+
+---
+
+## Check questions
+
+Answer both before moving to Module 2.
+
+**Q1.** In your own words: what is the difference between Terraform and the AWS Console? If a colleague asked "why not just click through the Console?", what would you tell them?
+
+**Q2.** Add a second provider block to your `main.tf` for a second region — use `ap-east-1` (Hong Kong) with a different alias. Run `terraform validate`, paste the result, and explain what the `alias` attribute does and why it exists.
