@@ -1,0 +1,21 @@
+changelog:
+  categories:
+    - title: "✨ Features"
+      labels:
+        - feat
+    - title: "🐛 Bug Fixes"
+      labels:
+        - fix
+        - hotfix
+    - title: "💅 Styles"
+      labels:
+        - style
+    - title: "♻️ Refactors"
+      labels:
+        - refactor
+    - title: "🔧 Chores"
+      labels:
+        - chore
+    - title: "⚡ Performance"
+      labels:
+        - perf
