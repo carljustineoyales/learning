@@ -8,6 +8,11 @@ terraform {
 }
 
 provider "aws" {
-  profile = "defaule"
+  profile = "default"
   region  = "ap-southeast-1"
+}
+
+provider "aws" {
+  alias  = "secondary"
+  region = "ap-east-1"
 }
