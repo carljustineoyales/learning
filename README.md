@@ -1,6 +1,6 @@
 # Personal Learning Repository
 
-A structured self-study repository covering shell scripting, Python, and Claude API development.
+A structured self-study repository covering shell scripting, Python, Terraform, and Claude API development.
 
 ## Structure
 
@@ -8,6 +8,7 @@ A structured self-study repository covering shell scripting, Python, and Claude 
 learning/
 ├── bash/           # Shell scripting curriculum (12 modules)
 ├── python/         # Python curriculum (10 modules)
+├── terraform/      # Terraform curriculum (8 modules)
 ├── claude/         # Claude API certification work
 └── prompts/        # Learning curriculum templates
 ```
@@ -51,6 +52,23 @@ Beginner-to-confident Python curriculum. `Prompt.md` contains the full instructo
 | 8 | Modules and Libraries | Planned |
 | 9 | Object-Oriented Programming | Planned |
 | 10 | Practical Python (projects) | Planned |
+
+---
+
+## Terraform
+
+Beginner-to-confident Terraform curriculum for AWS infrastructure, aimed at the HashiCorp Terraform Associate certification. `PROMPT.md` contains the full 8-module instructor prompt.
+
+| Module | Topic | Status |
+|--------|-------|--------|
+| 1 | Your first Terraform configuration | Done |
+| 2 | Resources, plans, and the Terraform workflow | Done |
+| 3 | Variables, outputs, and keeping configuration flexible | Done |
+| 4 | State — what Terraform remembers and why it matters | In progress |
+| 5 | Locals, data sources, and reading existing infrastructure | Planned |
+| 6 | Modules — packaging and reusing infrastructure | Planned |
+| 7 | Meta-arguments, expressions, and production patterns | Planned |
+| 8 | Guided practice project | Planned |
 
 ---
 
