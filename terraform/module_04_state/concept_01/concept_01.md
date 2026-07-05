@@ -27,6 +27,25 @@ The `id` is what AWS uses as the unique identifier for the resource. For S3, it 
 
 ---
 
+## Why terraform.tfstate Must Never Go in Git
+
+State files are JSON. Terraform stores everything AWS returns after creation — including sensitive values:
+
+1. **Database credentials** — usernames, passwords, and connection strings appear in plaintext in state when you create an RDS instance
+2. **IAM access keys** — key IDs and secret keys for service accounts appear in state when Terraform creates them
+
+Git history is permanent. A secret committed once stays in history forever, even after deletion. Even in a private repository, anyone with repo access can read the full history.
+
+```
+# Always add these to .gitignore
+*.tfstate
+*.tfstate.backup
+```
+
+The correct solution is remote state in S3 with `encrypt = true` — the file never touches your filesystem or Git.
+
+---
+
 ## How Terraform Uses State
 
 When you run `terraform plan`, Terraform:
@@ -37,20 +56,6 @@ When you run `terraform plan`, Terraform:
 4. Computes the diff and prints the plan
 
 Without the state file, Terraform cannot make safe decisions — it would not know what it already created.
-
----
-
-## Beginner Trap: Committing terraform.tfstate to Git
-
-State files contain sensitive information — resource IDs, ARNs, and sometimes plaintext secrets (database passwords, access keys). They also cause constant merge conflicts on teams.
-
-```
-# Always add these to .gitignore
-*.tfstate
-*.tfstate.backup
-```
-
-Use remote state (Concept 2) from day one on any team project.
 
 ---
 
