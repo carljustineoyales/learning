@@ -64,8 +64,8 @@ Beginner-to-confident Terraform curriculum for AWS infrastructure, aimed at the 
 | 1 | Your first Terraform configuration | Done |
 | 2 | Resources, plans, and the Terraform workflow | Done |
 | 3 | Variables, outputs, and keeping configuration flexible | Done |
-| 4 | State — what Terraform remembers and why it matters | In progress |
-| 5 | Locals, data sources, and reading existing infrastructure | Planned |
+| 4 | State — what Terraform remembers and why it matters | Done |
+| 5 | Locals, data sources, and reading existing infrastructure | In progress |
 | 6 | Modules — packaging and reusing infrastructure | Planned |
 | 7 | Meta-arguments, expressions, and production patterns | Planned |
 | 8 | Guided practice project | Planned |
