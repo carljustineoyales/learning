@@ -1,6 +1,6 @@
 # Personal Learning Repository
 
-A structured self-study repository covering shell scripting, Python, Terraform, and Claude API development.
+A structured self-study repository covering shell scripting, Python, and Terraform.
 
 ## Structure
 
@@ -9,7 +9,6 @@ learning/
 ├── bash/           # Shell scripting curriculum (12 modules)
 ├── python/         # Python curriculum (10 modules)
 ├── terraform/      # Terraform curriculum (8 modules)
-├── claude/         # Claude API certification work
 └── prompts/        # Learning curriculum templates
 ```
 
@@ -69,24 +68,6 @@ Beginner-to-confident Terraform curriculum for AWS infrastructure, aimed at the 
 | 6 | Modules — packaging and reusing infrastructure | Planned |
 | 7 | Meta-arguments, expressions, and production patterns | Planned |
 | 8 | Guided practice project | Planned |
-
----
-
-## Claude
-
-Claude API certification work using the Anthropic Python SDK.
-
-- **`claude/certification/domain1-agent/`** — Domain 1 agent exercises
-  - `agent.py` — Basic API connection and message example
-  - `requirements.txt` — Dependencies (`anthropic==0.86.0`)
-
-Setup:
-```bash
-cd claude/certification/domain1-agent
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
 
 ---
 
