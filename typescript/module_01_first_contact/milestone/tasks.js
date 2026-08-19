@@ -2,10 +2,13 @@
 function countCompleteTasks(tasks) {
     let count = 0;
     for (const task of tasks) {
-        if (task.complete)
-            count++;
+        inc(task, count);
     }
     return count;
+}
+function inc(task, count) {
+    if (task.complete)
+        return count++;
 }
 console.log(countCompleteTasks([
     { title: "Buy groceries", complete: true },
