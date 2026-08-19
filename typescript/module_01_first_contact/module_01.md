@@ -22,13 +22,49 @@ See [[milestone/milestone|Milestone]] — in progress, code written and
 compiling clean, check questions outstanding.
 
 ## Check Questions
-Not yet answered — pending before Module 2 opens.
+Answered 2026-08-19.
 
-1. In your own words, explain what happens to your type annotations between
-   writing `tasks.ts` and a browser executing the resulting JavaScript.
-2. Write a second small function for TidyList, deliberately introduce one
-   type error in it, then fix it. Show both the error and the fix.
+1. Type annotations exist only at compile time. `tsc` deletes them entirely
+   when emitting the `.js` file — nothing is hidden or reduced, there is
+   simply nothing left. A browser never sees a type, which is why a value
+   that slips past every compile-time check (user input, an API response)
+   gets zero protection once the code is actually running — nothing is
+   watching anymore.
+2. Deliberately introduced type error (bare parameters, `noImplicitAny`
+   under `strict: true`):
+
+   ```ts
+   function inc(task, count) {
+     if (task.complete) return count++;
+   }
+   ```
+   ```
+   tasks.ts:9:15 - error TS7006: Parameter 'task' implicitly has an 'any' type.
+   tasks.ts:9:20 - error TS7006: Parameter 'count' implicitly has an 'any' type.
+   ```
+
+   Fixed by annotating both parameters:
+
+   ```ts
+   type Task = { title: string; complete: boolean };
+   function inc(task: Task, count: number) {
+     if (task.complete) return count++;
+   }
+   ```
+   Compiles clean (`npx tsc` — no output).
+
+   **Known open issue (logic, not typing):** `count++` is post-increment —
+   it returns the pre-increment value, and since `count` is a plain `number`
+   parameter (not a reference), the increment does not persist for the
+   caller either way. When `task.complete` is `false`, the function falls
+   through with no `return`, implicitly returning `undefined` instead of
+   `count`. `tsc` does not catch this — it is valid TypeScript, just not
+   doing what the function name implies. Left unresolved by choice; noted
+   here rather than silently fixed.
+
+   Also note: `type Task = {...}` (a type alias) is Module 2, Concept 5
+   material, pulled forward here ahead of being formally taught — same
+   pattern as the array-type pull-forward in the milestone.
 
 ## Status
-🔄 In progress — all four concepts complete, milestone code written and
-compiling clean, check questions outstanding.
+✅ Complete — all four concepts, milestone, and check questions done.
